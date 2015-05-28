@@ -15,5 +15,6 @@ setup(
     author='Gareth Coles',
     author_email='gdude2002@gmail.com',
     description='Twisted protocol for the Minecraft Votifier protocol',
-    requires=['twisted', 'rsa', 'pyasn1']
+    requires=['twisted', 'rsa', 'pyasn1'],
+    provides=['twistifier']
 )
