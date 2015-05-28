@@ -61,7 +61,7 @@ class VotifierClient(Protocol):
 class DispatcherClient(VotifierClient):
     callback = None
 
-    def __init__(self, factory, privkey, callback, verbose=False):
+    def __init__(self, factory, privkey, callback=None, verbose=False):
         VotifierClient.__init__(self, factory, privkey, verbose=verbose)
         self.callback = callback
 
