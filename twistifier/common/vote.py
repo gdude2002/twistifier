@@ -22,8 +22,8 @@ class Vote(object):
             return "<Vote | No data>"
 
         return ("<Vote | Service: {0} | Username: {1} "
-                "| Address: {2} | Timestamp: {3}".format(self.service_name,
-                                                         self.username,
-                                                         self.address,
-                                                         self.time_stamp)
+                "| Address: {2} | Timestamp: {3}>".format(self.service_name,
+                                                          self.username,
+                                                          self.address,
+                                                          self.time_stamp)
                 )
