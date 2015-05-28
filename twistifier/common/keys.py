@@ -11,6 +11,7 @@ def create_keys(cores=None):
     Votifier data.
 
     :returns: a tuple (:py:class:`rsa.PublicKey`, :py:class:`rsa.PrivateKey`)
+    :rtype: tuple
     """
 
     if cores is None:
@@ -30,7 +31,7 @@ def save_keys(public, private, location):
 
     :type public: rsa.PublicKey
     :type private: rsa.PrivateKey
-    :type location: str
+    :type location: basestring
     """
 
     with open("{0}/id_rsa.pub".format(location), "w") as pubfile:
@@ -40,12 +41,32 @@ def save_keys(public, private, location):
         privfile.write(private.save_pkcs1())
 
 
+def get_strings(public, private):
+    """
+    Get the string values for a public and private key.
+
+    :param public: Public key to convert
+    :param private: Private key to convert
+
+    :type public: rsa.PublicKey
+    :type private: rsa.PrivateKey
+
+    :returns: a tuple (str, str)
+    :rtype: tuple
+    """
+
+    return public.save_pkcs1(), private.save_pkcs1()
+
+
 def has_keys(location):
     """
     Check whether a keypair exists in the specified location.
 
     :param location: Location to check for keys
-    :return:
+    :type location: basestring
+
+    :return: Whether the keypair exists or not
+    :rtype: bool
     """
 
     return (os.path.exists("{0}/id_rsa.pub".format(location)) and
@@ -57,8 +78,10 @@ def load_keys(location):
     Load a public and private key from a specified location.
 
     :param location: Location to load keys from
-    :type location: str
+    :type location: basestring
+
     :returns: a tuple (:py:class:`rsa.PublicKey`, :py:class:`rsa.PrivateKey`)
+    :rtype: tuple
     """
 
     return (
@@ -70,13 +93,35 @@ def load_keys(location):
     )
 
 
+def load_key_strings(public, private):
+    """
+    Load a public and private key from a pair of strings.
+
+    :param public: String representing a public key
+    :param private: String representing a private key
+
+    :type public: basestring
+    :type private: basestring
+
+    :returns: a tuple (:py:class:`rsa.PublicKey`, :py:class:`rsa.PrivateKey`)
+    :rtype: tuple
+    """
+
+    return (
+        rsa.PublicKey.load_pkcs1(public),
+        rsa.PrivateKey.load_pkcs1(private)
+    )
+
+
 def save_new_keys(location, cores=None):
     """
     Generate and save a new public and private key.
 
     :param location: Location to save keys
-    :type location: str
+    :type location: basestring
+
     :returns: a tuple (:py:class:`rsa.PublicKey`, :py:class:`rsa.PrivateKey`)
+    :rtype: tuple
     """
 
     pub, priv = create_keys(cores=cores)
