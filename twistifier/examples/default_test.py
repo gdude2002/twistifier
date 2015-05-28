@@ -1,6 +1,7 @@
 __author__ = 'Gareth Coles'
 
 
+from twistifier.server.protocol import DispatcherClient
 from twistifier.server.factory import VotifierFactory
 from twistifier.common.keys import save_new_keys, has_keys, load_keys
 
@@ -16,9 +17,15 @@ if __name__ == "__main__":
 
     del _
 
+    def callback(vote):
+        print vote
+
     print "Starting server.."
     endpoint = TCP4ServerEndpoint(reactor, 8192)
-    endpoint.listen(VotifierFactory(priv, verbose=True))
+    endpoint.listen(VotifierFactory(
+        priv, verbose=True, protocol_class=DispatcherClient,
+        args={"callback": callback}
+    ))
 
     print "Started."
     reactor.run()
