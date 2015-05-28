@@ -7,7 +7,7 @@ class Vote(object):
     time_stamp = None
 
     def parse(self, string):
-        split = string.split("\n").strip()
+        split = string.strip().split("\n")
 
         if split[0] != "VOTE":
             raise ValueError("Decrypted data invalid or key mismatch")
