@@ -62,8 +62,11 @@ class DispatcherClient(VotifierClient):
     callback = None
 
     def __init__(self, factory, privkey, callback, verbose=False):
-        VotifierClient.__init__(self, factory, privkey)
+        VotifierClient.__init__(self, factory, privkey, verbose=verbose)
         self.callback = callback
 
     def vote_received(self, vote):
+        if self.verbose:
+            print("Vote received")
+
         self.callback(vote)
