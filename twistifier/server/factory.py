@@ -22,4 +22,7 @@ class VotifierFactory(Factory):
         self.args = args
 
     def buildProtocol(self, addr):
-        return self.protocol_class(self, self.privkey, verbose=self.verbose)
+        args = self.args
+        args["verbose"] = self.verbose
+
+        return self.protocol_class(self, self.privkey, **args)
