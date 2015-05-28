@@ -56,3 +56,14 @@ class VotifierClient(Protocol):
         print("Vote received: {0} at {1}".format(
             vote.username, vote.service_name
         ))
+
+
+class DispatcherClient(VotifierClient):
+    callback = None
+
+    def __init__(self, factory, privkey, callback, verbose=False):
+        VotifierClient.__init__(self, factory, privkey)
+        self.callback = callback
+
+    def vote_received(self, vote):
+        self.callback(vote)
