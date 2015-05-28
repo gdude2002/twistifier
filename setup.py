@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='twistifier',
-    version='0.0.1',
+    version='0.0.2',
     packages=[
         'twistifier',
         'twistifier.client',
@@ -15,6 +15,7 @@ setup(
     author='Gareth Coles',
     author_email='gdude2002@gmail.com',
     description='Twisted protocol for the Minecraft Votifier protocol',
+    install_requires=['twisted', 'rsa', 'pyasn1'],
     requires=['twisted', 'rsa', 'pyasn1'],
     provides=['twistifier']
 )
