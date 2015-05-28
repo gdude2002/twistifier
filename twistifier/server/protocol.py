@@ -25,9 +25,6 @@ class VotifierClient(Protocol):
         self.verbose = verbose
 
     def dataReceived(self, data):
-        if self.verbose:
-            print("Data ({0}): {1}", len(self.buffer), data)
-
         self.buffer += data
 
         if len(self.buffer) > 256:
