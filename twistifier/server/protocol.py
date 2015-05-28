@@ -11,32 +11,41 @@ class VotifierClient(Protocol):
     factory = None
     privkey = None
     buffer = ""
+    verbose = False
 
     version = 1.9  # Votifier version
 
-    def __init__(self, factory, privkey):
+    def __init__(self, factory, privkey, verbose=False):
         """
         :type privkey: rsa.PrivateKey
         """
 
         self.factory = factory
         self.privkey = privkey
+        self.verbose = verbose
 
     def dataReceived(self, data):
         self.buffer += data
 
         if len(self.buffer) > 256:
+            if self.verbose:
+                print("Dropping connection: Data is longer than 256 bytes")
+
             self.transport.loseConnection()
             return
 
     def connectionLost(self, reason=connectionDone):
         if len(self.buffer) == 256:
-            data = rsa.decrypt(self.buffer, self.privkey)
+            try:
+                data = rsa.decrypt(self.buffer, self.privkey)
 
-            vote = Vote()
-            vote.parse(data)
+                vote = Vote()
+                vote.parse(data)
 
-            self.vote_received(vote)
+                self.vote_received(vote)
+            except Exception as e:
+                if self.verbose:
+                    print("Unable to decode: {0}".format(e))
 
     def connectionMade(self):
         self.transport.write(

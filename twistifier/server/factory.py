@@ -6,9 +6,11 @@ from twisted.internet.protocol import Factory
 
 class VotifierFactory(Factory):
     privkey = None
+    verbose = False
 
-    def __init__(self, privkey):
+    def __init__(self, privkey, verbose=False):
         self.privkey = privkey
+        self.verbose = verbose
 
     def buildProtocol(self, addr):
-        return VotifierClient(self, self.privkey)
+        return VotifierClient(self, self.privkey, verbose=self.verbose)

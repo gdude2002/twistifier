@@ -1,9 +1,11 @@
 __author__ = 'Gareth Coles'
 
+import os
 import rsa
+import multiprocessing
 
 
-def create_keys():
+def create_keys(cores=None):
     """
     Generate a new public key and private key, large enough to store the
     Votifier data.
@@ -11,7 +13,10 @@ def create_keys():
     :returns: a tuple (:py:class:`rsa.PublicKey`, :py:class:`rsa.PrivateKey`)
     """
 
-    return rsa.newkeys(2048)  # The size Votifier generates
+    if cores is None:
+        cores = multiprocessing.cpu_count()
+
+    return rsa.newkeys(2048, poolsize=cores)  # The size Votifier generates
 
 
 def save_keys(public, private, location):
@@ -35,6 +40,18 @@ def save_keys(public, private, location):
         privfile.write(private.save_pkcs1())
 
 
+def has_keys(location):
+    """
+    Check whether a keypair exists in the specified location.
+
+    :param location: Location to check for keys
+    :return:
+    """
+
+    return (os.path.exists("{0}/id_rsa.pub".format(location)) and
+            os.path.exists("{0}/id_rsa".format(location)))
+
+
 def load_keys(location):
     """
     Load a public and private key from a specified location.
@@ -53,7 +70,7 @@ def load_keys(location):
     )
 
 
-def save_new_keys(location):
+def save_new_keys(location, cores=None):
     """
     Generate and save a new public and private key.
 
@@ -62,6 +79,6 @@ def save_new_keys(location):
     :returns: a tuple (:py:class:`rsa.PublicKey`, :py:class:`rsa.PrivateKey`)
     """
 
-    pub, priv = create_keys()
+    pub, priv = create_keys(cores=cores)
     save_keys(pub, priv, location)
     return pub, priv
